@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YRY 人设解构报告</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--card:#14141f;--card2:#1a1a2e;--accent:#ff6b35;--accent2:#ffd166;
+  --gold:#fbbf24;--red:#ef4444;--green:#22c55e;--blue:#3b82f6;--purple:#a855f7;
+  --text:#e5e5e5;--muted:#6b7280;--border:#2a2a3e;
+}
+body{font-family:'Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 40%,rgba(255,107,53,.08) 0%,transparent 50%),radial-gradient(circle at 70% 60%,rgba(255,209,102,.05) 0%,transparent 50%);animation:drift 20s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-2%,2%)}}
+.hero-badge{background:var(--accent);color:#fff;padding:4px 16px;border-radius:20px;font-size:.8rem;font-weight:700;letter-spacing:2px;margin-bottom:24px;display:inline-block}
+.hero h1{font-size:clamp(2.5rem,8vw,5rem);font-weight:900;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .subtitle{font-size:clamp(1rem,3vw,1.4rem);color:var(--muted);max-width:600px;margin-bottom:40px}
+.hero .tagline{font-size:1.1rem;color:var(--accent2);font-weight:500;font-style:italic;opacity:.8}
+
+/* Scroll indicator */
+.scroll-hint{position:absolute;bottom:30px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+.scroll-hint svg{width:24px;height:24px;stroke:var(--muted);fill:none;stroke-width:2}
+
+/* Container */
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* Section */
+.section{padding:80px 0}
+.section-label{font-size:.75rem;color:var(--accent);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-size:clamp(1.8rem,5vw,2.5rem);font-weight:900;margin-bottom:16px}
+.section-desc{color:var(--muted);font-size:1.05rem;margin-bottom:40px;max-width:700px}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;transition:transform .2s,border-color .2s}
+.stat-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.stat-card .num{font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card .label{font-size:.85rem;color:var(--muted);margin-top:4px}
+
+/* Quote */
+.quote-card{background:var(--card);border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:20px 24px;margin-bottom:16px;position:relative;transition:transform .2s}
+.quote-card:hover{transform:translateX(4px)}
+.quote-card .text{font-size:1.05rem;line-height:1.8}
+.quote-card .text em{color:var(--accent2);font-style:normal;font-weight:700}
+.quote-card .meta{font-size:.8rem;color:var(--muted);margin-top:8px}
+.quote-card .meta .author{color:var(--accent)}
+
+/* Self-quote */
+.self-quote{border-left-color:var(--red)}
+.self-quote .text em{color:var(--red)}
+
+/* Tag cloud */
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.tag{padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:500;border:1px solid var(--border);background:var(--card);transition:all .2s}
+.tag:hover{border-color:var(--accent);color:var(--accent)}
+.tag.hot{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.tag .count{font-size:.75rem;color:var(--muted);margin-left:4px}
+
+/* Bar chart */
+.bar-chart{margin-bottom:32px}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bar-label{font-size:.85rem;min-width:80px;text-align:right;color:var(--muted)}
+.bar-track{flex:1;height:28px;background:var(--card);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:.8rem;font-weight:700;color:#fff;min-width:fit-content;transition:width 1s ease}
+.bar-fill.orange{background:linear-gradient(90deg,var(--accent),#ff8c5a)}
+.bar-fill.gold{background:linear-gradient(90deg,#d97706,var(--gold))}
+.bar-fill.red{background:linear-gradient(90deg,#b91c1c,var(--red))}
+.bar-fill.green{background:linear-gradient(90deg,#15803d,var(--green))}
+.bar-fill.blue{background:linear-gradient(90deg,#1d4ed8,var(--blue))}
+.bar-fill.purple{background:linear-gradient(90deg,#7e22ce,var(--purple))}
+
+/* Hour chart */
+.hour-chart{display:flex;align-items:flex-end;gap:3px;height:120px;margin:20px 0 8px;padding:0 4px}
+.hour-bar{flex:1;background:var(--accent);border-radius:3px 3px 0 0;transition:height 1s ease;min-width:0;position:relative;cursor:pointer}
+.hour-bar:hover{background:var(--accent2)}
+.hour-bar .tip{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);padding:2px 8px;border-radius:4px;font-size:.7rem;white-space:nowrap;z-index:10}
+.hour-bar:hover .tip{display:block}
+.hour-labels{display:flex;gap:3px;padding:0 4px}
+.hour-labels span{flex:1;text-align:center;font-size:.6rem;color:var(--muted);min-width:0}
+
+/* Personality axis */
+.axis{margin-bottom:24px}
+.axis-header{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:6px}
+.axis-header .left{color:var(--green)}
+.axis-header .right{color:var(--red)}
+.axis-track{height:8px;background:var(--card);border-radius:4px;position:relative}
+.axis-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:var(--accent);border-radius:50%;border:2px solid var(--accent2);box-shadow:0 0 10px rgba(255,107,53,.4)}
+
+/* Verdict */
+.verdict{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center;margin-top:40px}
+.verdict h3{font-size:1.8rem;font-weight:900;margin-bottom:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.verdict p{color:var(--muted);font-size:1.05rem;line-height:1.8;max-width:700px;margin:0 auto}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:60px 0}
+
+/* Comparison */
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.comp-card{background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border)}
+.comp-card h4{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.comp-card .big{font-size:1.8rem;font-weight:900}
+.comp-card.win .big{color:var(--green)}
+.comp-card.lose .big{color:var(--red)}
+
+/* Footer */
+footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:.8rem}
+
+/* Responsive */
+@media(max-width:640px){
+  .comparison{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .section{padding:60px 0}
+}
+
+/* Animate on scroll */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-badge">CLASSIFIED DOSSIER</span>
+  <h1>YRY 人设解构报告</h1>
+  <p class="subtitle">基于 <strong>106,567</strong> 条消息、<strong>498</strong> 天数据的深度人格剖析<br>一份来自群聊大数据的灵魂X光片</p>
+  <p class="tagline">"离神还有点距离，但离人已经很远了" —— SJW</p>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- Section 1: 基本数据 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 01</div>
+  <div class="section-title">这个人有多能聊？</div>
+  <div class="section-desc">答：在一个126.9万条消息的群里，他一个人贡献了8.4%。日均214条。凌晨三点还有3900条。你的室友可能一天都不跟你说214句话。</div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num">106,567</div><div class="label">总消息数</div></div>
+    <div class="stat-card"><div class="num">214</div><div class="label">日均消息</div></div>
+    <div class="stat-card"><div class="num">498</div><div class="label">活跃天数</div></div>
+    <div class="stat-card"><div class="num">8.4%</div><div class="label">群占比</div></div>
+    <div class="stat-card"><div class="num">4,589</div><div class="label">脏话总数</div></div>
+    <div class="stat-card"><div class="num">7,973</div><div class="label">复读次数</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 2: 作息 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 02</div>
+  <div class="section-title">一个不睡觉的人</div>
+  <div class="section-desc">凌晨0-5点消息量 <strong>21,441条</strong>，占总量20%。说了1,550次"睡觉了"，然后继续聊。YRY的"睡觉了"是一种行为艺术，跟"改天请你吃饭"属于同一种修辞手法。</div>
+
+  <div style="background:var(--card);border-radius:16px;padding:24px;border:1px solid var(--border)">
+    <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">24小时消息分布（越高越活跃）</div>
+    <div class="hour-chart" id="hourChart"></div>
+    <div class="hour-labels" id="hourLabels"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:.75rem;color:var(--muted)">
+      <span>&#x1f634; 7-8点：疑似打盹时段</span>
+      <span>&#x1f525; 18-20点：巅峰输出期</span>
+    </div>
+  </div>
+
+  <div class="quote-card self-quote" style="margin-top:24px">
+    <div class="text"><em>[2024-11-25 03:14]</em> 睡觉了 <br>&#x2192; 继续聊到凌晨4点</div>
+    <div class="meta">YRY本人 &middot; 经典"假睡"</div>
+  </div>
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-11-25 21:02]</em> 晚上不熬夜了 <br>&#x2192; 当天23点依然活跃</div>
+    <div class="meta">YRY本人 &middot; 再次假睡</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 3: 口头禅 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 03</div>
+  <div class="section-title">YRY词典</div>
+  <div class="section-desc">如果有一天AI学会了YRY说话，你会听到一个永远在说"老乡"、"我只能说"、"无敌了"、"你麻了"的温州口音机器人，每三句话夹一句脏话。</div>
+
+  <div class="tags">
+    <span class="tag hot">老乡 <span class="count">707</span></span>
+    <span class="tag hot">呵呵 <span class="count">355</span></span>
+    <span class="tag hot">傻逼 <span class="count">228</span></span>
+    <span class="tag hot">无敌了 <span class="count">200</span></span>
+    <span class="tag">我尼玛 <span class="count">159</span></span>
+    <span class="tag">我只能说 <span class="count">150</span></span>
+    <span class="tag">我说白了 <span class="count">112</span></span>
+    <span class="tag">睡觉了 <span class="count">110</span></span>
+    <span class="tag">他妈的 <span class="count">96</span></span>
+    <span class="tag">你麻了 <span class="count">82</span></span>
+    <span class="tag">你麻痹的 <span class="count">74</span></span>
+    <span class="tag">速度 <span class="count">71</span></span>
+    <span class="tag">只能说 <span class="count">66</span></span>
+    <span class="tag">说白了 <span class="count">65</span></span>
+    <span class="tag">卧槽尼玛 <span class="count">62</span></span>
+    <span class="tag">我草泥马的 <span class="count">61</span></span>
+    <span class="tag">无所谓的 <span class="count">56</span></span>
+  </div>
+
+  <div style="background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border);margin-bottom:20px">
+    <div style="font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:12px">&#x1f4d6; YRY专属句式结构</div>
+    <div style="font-size:.95rem;color:var(--muted);line-height:2">
+      <strong style="color:var(--text)">"我只能说 + [观点] + 说白了 + [更激进的观点]"</strong><br>
+      合计使用 <strong style="color:var(--accent)">393次</strong>。这是他发表任何意见的标准框架。翻译成普通话就是："听好了，我要开始装逼了。"<br><br>
+      <strong style="color:var(--text)">"卧槽你大爸爸"</strong> —— 独创脏话，全群只有他用，使用比率是群平均的 <strong style="color:var(--red)">11.19倍</strong>。属于非物质文化遗产级别。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 4: 交易风格 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 04</div>
+  <div class="section-title">合约狂徒温州牛蛙</div>
+  <div class="section-desc">他在群里的第一条消息是："<strong>校长我想赚钱啊啊啊啊啊啊啊啊啊啊</strong>"。498天后，这个人设一直没变过。</div>
+
+  <div class="comparison">
+    <div class="comp-card lose">
+      <h4>&#x1f4c9; 亏钱相关消息</h4>
+      <div class="big">1,032条</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:4px">亏了/亏麻/爆仓/归零/血亏</div>
+    </div>
+    <div class="comp-card win">
+      <h4>&#x1f4c8; 赚钱相关消息</h4>
+      <div class="big">1,411条</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:4px">赚了/赚麻/翻倍/起飞</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border);margin-bottom:24px">
+    <div style="font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:12px">&#x1f3b0; 操作风格指标</div>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-label">冲/干/上车</div><div class="bar-track"><div class="bar-fill red" style="width:100%">1,114</div></div></div>
+      <div class="bar-row"><div class="bar-label">FOMO</div><div class="bar-track"><div class="bar-fill orange" style="width:18.7%">208</div></div></div>
+      <div class="bar-row"><div class="bar-label">梭哈/重仓</div><div class="bar-track"><div class="bar-fill gold" style="width:11.7%">130</div></div></div>
+      <div class="bar-row"><div class="bar-label">减仓/止损</div><div class="bar-track"><div class="bar-fill green" style="width:9.9%">110</div></div></div>
+    </div>
+    <div style="font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px">冲 : 止损 = <strong style="color:var(--red)">10 : 1</strong> —— 油门踩到底，刹车装饰用</div>
+  </div>
+
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-11-24 16:39]</em> 校长我想赚钱啊啊啊啊啊啊啊啊啊啊</div>
+    <div class="meta">YRY本人 &middot; 他在这个群的<strong>第一条消息</strong>，开局即巅峰</div>
+  </div>
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-12-03 01:01]</em> 你们就是畜生 我50sol都止盈了 <em>又被你们fomo进去了</em></div>
+    <div class="meta">YRY本人 &middot; 经典FOMO受害者发言</div>
+  </div>
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-11-24 18:31]</em> 今天亏了他妈 <em>10000刀</em></div>
+    <div class="meta">YRY本人 &middot; 入群第一天就亏一万刀，速度确实够快</div>
+  </div>
+
+  <div style="background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border);margin-top:24px">
+    <div style="font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:12px">&#x1f4a1; 群友精准点评</div>
+    <div class="quote-card" style="border-left-color:var(--blue)">
+      <div class="text">"<em>yry来回波最后亏钱走的一般是好东西</em>"</div>
+      <div class="meta"><span class="author">JZ(橘子)</span> &middot; 有眼光但拿不住的完美总结</div>
+    </div>
+    <div class="quote-card" style="border-left-color:var(--blue)">
+      <div class="text">"<em>不碰合约的话感觉yry已经A9.3了</em>"</div>
+      <div class="meta"><span class="author">JZ(橘子)</span> &middot; 被大量群友复读，说明是共识</div>
+    </div>
+    <div class="quote-card" style="border-left-color:var(--blue)">
+      <div class="text">"合约这块，除了yry和宏哥橘子，<em>我还没见过几个天才选手</em>"</div>
+      <div class="meta"><span class="author">YX(闫旭)</span> &middot; 天才和疯子一线之隔</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 5: 人格轴 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 05</div>
+  <div class="section-title">人格光谱</div>
+  <div class="section-desc">基于消息关键词频率的人格维度分析。每个轴的小圆点位置代表他在该维度的倾向。</div>
+
+  <div style="background:var(--card);border-radius:16px;padding:28px;border:1px solid var(--border)">
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f910; 理性冷静</span><span class="right">&#x1f525; 情绪爆炸</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:82%"></div></div>
+    </div>
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f6e1; 稳健保守</span><span class="right">&#x1f3b0; 梭哈狂魔</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:88%"></div></div>
+    </div>
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f910; 沉默寡言</span><span class="right">&#x1f4e3; 话痨之王</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:95%"></div></div>
+    </div>
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f634; 早睡早起</span><span class="right">&#x1f319; 永不入眠</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:90%"></div></div>
+    </div>
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f607; 文明礼貌</span><span class="right">&#x1f92c; 脏话连篇</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:78%"></div></div>
+    </div>
+    <div class="axis">
+      <div class="axis-header"><span class="left">&#x1f3af; 独狼操作</span><span class="right">&#x1f91d; 带团冲锋</span></div>
+      <div class="axis-track"><div class="axis-dot" style="left:75%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 6: 群友评价 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 06</div>
+  <div class="section-title">群友怎么看他</div>
+  <div class="section-desc"><strong>6,822条</strong>消息提到过他。以下是经过精选的群友语录，涵盖封神、吐槽和破防三个维度。</div>
+
+  <div style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px">&#x1f451; 封神系列</div>
+
+  <div class="quote-card" style="border-left-color:var(--gold)">
+    <div class="text">"再说一遍，这是市场的主人、合约狂徒、温州牛蛙小子、浙江赌怪、NFT之神、山寨之王、土狗教父、<em>永赚机</em>、尊贵的劳斯莱斯..."</div>
+    <div class="meta"><span class="author">ZHSEA(咋回事儿啊)</span> &middot; 最长封号，被群友大量复读</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--gold)">
+    <div class="text">"<em>yry离神还有点距离，但离人已经很远了</em>"</div>
+    <div class="meta"><span class="author">SJW(孙佳伟)</span> &middot; 本报告标题来源</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--gold)">
+    <div class="text">"yry哪天找马斯克打两圈麻将<em>我都不奇怪</em>"</div>
+    <div class="meta"><span class="author">ZHSEA(咋回事儿啊)</span></div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--gold)">
+    <div class="text">"<em>四大硬通货：石油、黄金、军火、yry的好友位</em>"</div>
+    <div class="meta"><span class="author">XHP(许海朋)</span> &middot; 被无限复读的群梗</div>
+  </div>
+
+  <div style="font-size:1rem;font-weight:700;color:var(--purple);margin:32px 0 16px">&#x1f3ad; 吐槽系列</div>
+
+  <div class="quote-card" style="border-left-color:var(--purple)">
+    <div class="text">"yry是有点幽默的，<em>打游戏喷人，打德州顺筹码，打台球算错账</em>"</div>
+    <div class="meta"><span class="author">HA(黄傲)</span> &middot; 三连精准打击，被大量复读</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--purple)">
+    <div class="text">"yry吃过最大的苦就是<em>在自家厂里指挥工人上班</em>"</div>
+    <div class="meta"><span class="author">ZHSEA(咋回事儿啊)</span> &middot; 温州富二代实锤</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--purple)">
+    <div class="text">"这yry谁都不服，<em>只要不符合他的想法就是吵</em>"</div>
+    <div class="meta"><span class="author">ZXD(张旭东)</span> &middot; 群内辩论王认证</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--purple)">
+    <div class="text">"yry生俩孩子，每天<em>吃喝嫖赌跟没事人一样</em>，还是挺牛的"</div>
+    <div class="meta"><span class="author">XHP(许海朋)</span> &middot; 不知道是夸还是骂</div>
+  </div>
+  <div class="quote-card" style="border-left-color:var(--purple)">
+    <div class="text">"<em>听yry讲话就是很享受，像是漫步在挪威的森林</em>"</div>
+    <div class="meta"><span class="author">DS(丁胜)</span> &middot; 高级黑，被反复复读成群梗</div>
+  </div>
+
+  <div style="font-size:1rem;font-weight:700;color:var(--red);margin:32px 0 16px">&#x1f4a5; 破防瞬间</div>
+
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-11-28 01:00]</em> 土狗王我成了哈哈哈哈哈哈哈哈哈哈...我是真的土狗王了...我真的分不清<em>啊啊啊啊啊啊啊啊啊啊</em></div>
+    <div class="meta">YRY本人 &middot; 深夜emo + 自嗨混合态</div>
+  </div>
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-12-09 16:50]</em> 为什么不能被我包养<em>啊啊啊啊啊啊啊啊啊啊啊啊</em></div>
+    <div class="meta">YRY本人 &middot; 灵魂呐喊</div>
+  </div>
+  <div class="quote-card self-quote">
+    <div class="text"><em>[2024-12-01 19:51]</em> 靠嫩娘<em>啊啊啊啊啊啊啊啊啊啊啊啊啊啊</em></div>
+    <div class="meta">YRY本人 &middot; "啊"的数量与亏损金额成正比</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 7: 温州安利王 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 07</div>
+  <div class="section-title">温州旅游形象大使</div>
+  <div class="section-desc">提及"温州" <strong>811次</strong>。平均每天安利温州1.6次。如果温州市文旅局知道有这么个人，应该给他发工资。</div>
+
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card"><div class="num">811</div><div class="label">提及温州</div></div>
+    <div class="stat-card"><div class="num">707</div><div class="label">喊"老乡"</div></div>
+    <div class="stat-card"><div class="num">2,808</div><div class="label">吃喝相关</div></div>
+  </div>
+
+  <div style="background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border)">
+    <div style="font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:12px">&#x1f4cd; 温州安利语录精选</div>
+    <div style="color:var(--muted);line-height:2.2;font-size:.95rem">
+      "来温州吧" &middot; "看不起温州帮？" &middot; "真不来温州马" &middot; "可以来温州了把" &middot; "温州帮有一个正常人吗"<em style="color:var(--accent)">（最后一句是别人说的）</em>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 8: 与猴子的关系 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 08</div>
+  <div class="section-title">YRY与猴子：一段复杂的关系</div>
+  <div class="section-desc">提及猴子/猴哥 <strong>175次</strong>。嘴上说"我跟猴子都不熟"，身体很诚实地跟了单。</div>
+
+  <div class="bar-chart">
+    <div class="bar-row"><div class="bar-label" style="min-width:100px">肯定/欣赏</div><div class="bar-track"><div class="bar-fill green" style="width:45%">猴子太精神了 / 猴哥最近乱杀</div></div></div>
+    <div class="bar-row"><div class="bar-label" style="min-width:100px">一起亏钱</div><div class="bar-track"><div class="bar-fill red" style="width:30%">跟猴子一起亏了 / 被猴子割了</div></div></div>
+    <div class="bar-row"><div class="bar-label" style="min-width:100px">划清界限</div><div class="bar-track"><div class="bar-fill blue" style="width:15%">我跟猴子都不熟</div></div></div>
+    <div class="bar-row"><div class="bar-label" style="min-width:100px">偷偷跟单</div><div class="bar-track"><div class="bar-fill purple" style="width:10%">我跟单猴子的</div></div></div>
+  </div>
+
+  <div style="font-size:.9rem;color:var(--muted);text-align:center;font-style:italic;margin-top:16px">"我跟猴子都不熟" + "我跟单猴子的" = 典型的口嫌体正直</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Section 9: 复读机 -->
+<section class="section reveal">
+  <div class="section-label">Chapter 09</div>
+  <div class="section-title">人形复读机</div>
+  <div class="section-desc">复读别人 <strong>7,973次</strong>，被别人复读 <strong>8,047次</strong>。完美的复读生态平衡。在这个群里，他既是复读的源头，也是复读的终点。一个自产自销的meme工厂。</div>
+
+  <div class="comparison">
+    <div class="comp-card">
+      <h4>&#x1f4e4; 复读别人</h4>
+      <div class="big" style="color:var(--accent)">7,973次</div>
+    </div>
+    <div class="comp-card">
+      <h4>&#x1f4e5; 被人复读</h4>
+      <div class="big" style="color:var(--accent2)">8,047次</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Final Verdict -->
+<section class="section reveal">
+  <div class="section-label">Final Chapter</div>
+  <div class="section-title">终极人设判定</div>
+
+  <div class="verdict">
+    <h3>"温州土狗教父"</h3>
+    <p>
+      一个 <strong>全天候在线</strong> 的温州富二代，凌晨三点还在群里骂人"你麻了"。<br><br>
+      交易风格是 <strong>油门焊死型</strong>——"冲/干/上车"说了1,114次，"止损"只说了110次，10:1的冲止比堪称行为艺术。<br><br>
+      有真本事（被群友评价为"合约天才"），也有真毛病（拿不住、爱追高、被fomo），群友总结为"<strong>不碰合约的话已经A9.3了</strong>"——换句话说，他的天花板就是他自己。<br><br>
+      脏话频率 <strong>4.8%</strong>，每20条消息就要问候一次别人的家人，但群友都很喜欢他，因为他同时也是群里的 <strong>快乐源泉</strong> 和 <strong>信息枢纽</strong>。<br><br>
+      他说了1,550次"睡觉了"，然后继续聊。他说了707次"老乡"，安利了811次温州。他在群里的第一句话是想赚钱，最后一句话大概率也是。<br><br>
+      <em style="color:var(--accent)">"离神还有点距离，但离人已经很远了。"</em><br>
+      这句话精准到可以刻在他的墓碑上——当然前提是他能在凌晨3点停止发消息。
+    </p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>&#x1f4ca; 基于 106,567 条消息 &middot; 498天数据 &middot; 大数据人格剖析<br>
+  <span style="opacity:.5">本报告纯属娱乐，数据真实但解读请勿对号入座</span></p>
+</footer>
+
+<script>
+// Hour chart data
+const hours = [4821,4391,3907,3684,2831,2099,2076,2300,2837,3329,3703,4087,4542,4853,5154,5714,6346,6210,7340,6997,6834,6400,5785,5460];
+const maxH = Math.max(...hours);
+const chartEl = document.getElementById('hourChart');
+const labelsEl = document.getElementById('hourLabels');
+hours.forEach(function(v, i) {
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar';
+  bar.style.height = (v / maxH * 100) + '%';
+  if (i >= 0 && i <= 5) bar.style.background = '#7e22ce'; // late night purple
+  const tip = document.createElement('div');
+  tip.className = 'tip';
+  tip.textContent = i + ':00 - ' + v + '条';
+  bar.appendChild(tip);
+  chartEl.appendChild(bar);
+
+  const lbl = document.createElement('span');
+  lbl.textContent = (i % 3 === 0) ? i + '' : '';
+  labelsEl.appendChild(lbl);
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.15});
+reveals.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
